@@ -8,7 +8,7 @@ from user_service.models import (
 )
 from property_management.models import (
     LeasePropertyDetails, UserInvitation, Template, TemplateFields,
-    TemplateValues,LeaseDocumentsMapping , TermAndCondition ,AuditLog
+    TemplateValues,LeaseDocumentsMapping , TermAndCondition ,AuditLog , Approval
 )
 
 # -------------------- User Service Admin --------------------
@@ -163,4 +163,8 @@ class AuditLogAdmin(admin.ModelAdmin):
     list_filter = ["action_type","created"]
     search_fields = ["message","userprofile__user__username"]
 
+@admin.register(Approval)
+class ApprovalAdmin(admin.ModelAdmin):
 
+    list_display = ["date_requested","requested_by","property_unit","tenant","tenure","rent","actual_rent","is_approved","is_rejected"]
+    list_filter = ["is_approved","is_rejected","date_requested"]

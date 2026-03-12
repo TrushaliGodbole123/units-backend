@@ -269,6 +269,71 @@ class AuditLog(Base):
         return f"{self.userprofile} - {self.action_type}"
 
 
+class Approval(Base):
+
+    date_requested = models.DateTimeField(auto_now_add=True)
+
+    requested_by = models.ForeignKey(
+        "user_service.UserProfile",
+        on_delete=models.CASCADE,
+        related_name="approval_requests"
+    )
+
+    property_unit = models.ForeignKey(
+        "user_service.PropertyUnitDetails",
+        on_delete=models.CASCADE,
+        related_name="approval_units"
+    )
+
+    tenant = models.ForeignKey(
+        "user_service.UserProfile",
+        limit_choices_to={'user_role': constants.TENANT},
+        on_delete=models.CASCADE,
+        related_name="tenant_approvals",
+        null=True,
+        blank=True
+    )
+
+    tenure = models.CharField(
+        max_length=100
+    )
+
+    actual_tenure = models.ForeignKey(
+        "user_service.PropertyUnitDetails",
+        on_delete=models.CASCADE,
+        related_name="actual_tenure_units"
+    )
+
+    rent = models.DecimalField(
+        max_digits=10,
+        decimal_places=2
+    )
+
+    actual_rent = models.ForeignKey(
+        "user_service.PropertyUnitDetails",
+        on_delete=models.CASCADE,
+        related_name="approval_actual_rents",
+        null=True,
+        blank=True
+    )
+
+    is_approved = models.BooleanField(default=False)
+    is_rejected = models.BooleanField(default=False)
+
+    approved_by = models.ForeignKey(
+        "user_service.UserProfile",
+        on_delete=models.CASCADE,
+        related_name="approved_approvals",
+        null=True,
+        blank=True
+    )
+
+    approved_at = models.DateTimeField()
+
+    def __str__(self):
+        return f"{self.property_unit} - {self.tenant}"
+
+
 #==========================================================
 #--------------- Role Permission management ---------------
 #==========================================================
