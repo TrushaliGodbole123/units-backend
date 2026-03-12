@@ -280,9 +280,9 @@ class Approval(Base):
     )
 
     property_unit = models.ForeignKey(
-        "user_service.PropertyUnitDetails",
+        "user_service.UnitDetails",
         on_delete=models.CASCADE,
-        related_name="approval_units"
+        related_name="approvals"
     )
 
     tenant = models.ForeignKey(
@@ -294,25 +294,13 @@ class Approval(Base):
         blank=True
     )
 
-    tenure = models.CharField(
-        max_length=100
-    )
+    tenure = models.CharField(max_length=100)
+    rent = models.DecimalField(max_digits=10, decimal_places=2)
 
-    actual_tenure = models.ForeignKey(
-        "user_service.PropertyUnitDetails",
-        on_delete=models.CASCADE,
-        related_name="actual_tenure_units"
-    )
-
-    rent = models.DecimalField(
+    actual_tenure = models.CharField(max_length=100, null=True, blank=True)
+    actual_rent = models.DecimalField(
         max_digits=10,
-        decimal_places=2
-    )
-
-    actual_rent = models.ForeignKey(
-        "user_service.PropertyUnitDetails",
-        on_delete=models.CASCADE,
-        related_name="approval_actual_rents",
+        decimal_places=2,
         null=True,
         blank=True
     )
@@ -328,10 +316,10 @@ class Approval(Base):
         blank=True
     )
 
-    approved_at = models.DateTimeField()
+    approved_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
-        return f"{self.property_unit} - {self.tenant}"
+        return f"{self.property_unit.unit_name} - {self.tenant}"
 
 
 #==========================================================
